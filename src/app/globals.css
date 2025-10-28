@@ -2,11 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Breiteres Layout */
+/* Responsive Container - Mehr Freiraum auf Mobile */
 .container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 1rem; /* Mehr Freiraum auf Mobile */
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 0 1.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 1.5rem;
+  }
 }
 
 @media (min-width: 1600px) {
@@ -80,15 +92,33 @@
   --font-family-sans: 'Quicksand', system-ui, sans-serif;
   --font-family-display: 'Quicksand', system-ui, sans-serif;
 
-  /* Spacing System (8pt Grid) */
-  --spacing-xs: 0.25rem;   /* 4px */
-  --spacing-sm: 0.5rem;    /* 8px */
-  --spacing-md: 1rem;      /* 16px */
-  --spacing-lg: 1.5rem;    /* 24px */
-  --spacing-xl: 2rem;      /* 32px */
-  --spacing-2xl: 3rem;     /* 48px */
-  --spacing-3xl: 4rem;     /* 64px */
-  --spacing-4xl: 6rem;     /* 96px */
+  /* Einheitliches Spacing System (8pt Grid) */
+  --spacing-xs: 0.25rem;   /* 4px - Micro spacing */
+  --spacing-sm: 0.5rem;    /* 8px - Small spacing */
+  --spacing-md: 1rem;      /* 16px - Medium spacing */
+  --spacing-lg: 1.5rem;    /* 24px - Large spacing */
+  --spacing-xl: 2rem;      /* 32px - Extra large spacing */
+  --spacing-2xl: 3rem;     /* 48px - 2x large spacing */
+  --spacing-3xl: 4rem;     /* 64px - 3x large spacing */
+  --spacing-4xl: 6rem;     /* 96px - 4x large spacing */
+  --spacing-5xl: 8rem;     /* 128px - 5x large spacing */
+  --spacing-6xl: 12rem;    /* 192px - 6x large spacing */
+
+  /* Spezifische Abstände für Dr. Schirmer Website */
+  --spacing-section: 5rem;     /* 80px - Standard Sektion-Abstand */
+  --spacing-section-lg: 7rem;  /* 112px - Große Sektion-Abstände */
+  --spacing-element: 1.5rem;   /* 24px - Standard Element-Abstand */
+  --spacing-element-sm: 1rem;   /* 16px - Kleine Element-Abstände */
+
+  /* Bindungsstreifen */
+  --divider-color: #e5e7eb;    /* Hellgrau für Bindungsstreifen */
+  --divider-width: 80%;         /* Breite des Bindungsstreifens */
+  --divider-height: 1px;        /* Höhe des Bindungsstreifens */
+  --spacing-element-lg: 2rem;  /* 32px - Große Element-Abstände */
+  --spacing-card: 1.5rem;       /* 24px - Card-Padding */
+  --spacing-card-lg: 2rem;      /* 32px - Große Card-Padding */
+  --spacing-text: 1rem;         /* 16px - Text-Abstände */
+  --spacing-text-lg: 1.5rem;    /* 24px - Große Text-Abstände */
 
   /* Border Radius */
   --radius-sm: 0.375rem;
@@ -118,14 +148,16 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    background-color: white;
   }
 
   body {
     font-family: var(--font-family-sans);
-    line-height: 1.6;
+    line-height: 1.7;
     color: var(--text-primary);
-    background-color: var(--bg-main);
+    background-color: white;
     font-weight: 500;
+    font-size: clamp(0.875rem, 2vw, 1rem);
   }
 
   /* Typografie-Skala - Organic & Human-Centric */
@@ -137,19 +169,19 @@
   }
 
   h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(1.75rem, 5vw + 1rem, 3rem);
   }
 
   h2 {
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-size: clamp(1.5rem, 4vw + 0.5rem, 2.25rem);
   }
 
   h3 {
-    font-size: clamp(1.25rem, 3vw, 1.875rem);
+    font-size: clamp(1.25rem, 3vw + 0.25rem, 1.875rem);
   }
 
   h4 {
-    font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+    font-size: clamp(1.125rem, 2.5vw + 0.125rem, 1.5rem);
   }
 
   /* Focus Styles für Accessibility */
@@ -206,6 +238,7 @@
     transform: scale(1.05);
     box-shadow: 0 8px 25px rgba(220, 38, 38, 0.5);
   }
+
 
   /* Info Bar */
   .info-bar {
@@ -282,10 +315,132 @@
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
-  /* Section Spacing */
+  /* VOLLSTÄNDIG EINHEITLICHE Section Spacing - Mehr Freiraum auf Mobile */
   .section-padding {
-    @apply py-16 lg:py-24;
+    @apply py-16 lg:py-20; /* Mehr Freiraum auf Mobile */
   }
+
+  .section-padding-sm {
+    @apply py-16 lg:py-16; /* Mehr Freiraum auf Mobile */
+  }
+
+  .section-padding-lg {
+    @apply py-20 lg:py-24;
+  }
+
+  .section-padding-xl {
+    @apply py-24 lg:py-28;
+  }
+
+  /* VOLLSTÄNDIG EINHEITLICHE Element-Abstände */
+  .element-spacing {
+    @apply mb-6;
+  }
+
+  .element-spacing-sm {
+    @apply mb-4;
+  }
+
+  .element-spacing-lg {
+    @apply mb-8;
+  }
+
+  .element-spacing-xl {
+    @apply mb-12;
+  }
+
+  .element-spacing-2xl {
+    @apply mb-16;
+  }
+
+  /* Einheitliche Text-Abstände */
+  .text-spacing {
+    @apply mb-4;
+  }
+
+  .text-spacing-sm {
+    @apply mb-2;
+  }
+
+  .text-spacing-lg {
+    @apply mb-6;
+  }
+
+  /* Line Clamp Utilities */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Einheitliche Card-Abstände */
+  .card-spacing {
+    @apply p-6;
+  }
+
+  .card-spacing-sm {
+    @apply p-4;
+  }
+
+  .card-spacing-lg {
+    @apply p-8;
+  }
+
+  /* VOLLSTÄNDIG EINHEITLICHE Grid-Abstände */
+  .grid-spacing {
+    @apply gap-6;
+  }
+
+  .grid-spacing-sm {
+    @apply gap-4;
+  }
+
+  .grid-spacing-lg {
+    @apply gap-8;
+  }
+
+  .grid-spacing-xl {
+    @apply gap-12;
+  }
+
+  .grid-spacing-2xl {
+    @apply gap-16;
+  }
+
+  /* EINHEITLICHE Hintergrundfarben */
+  .bg-section-primary {
+    @apply bg-white;
+  }
+
+  .bg-section-secondary {
+    @apply bg-gradient-to-br from-gray-50 to-gray-100;
+  }
+
+  .bg-section-accent {
+    @apply bg-gradient-to-br from-blue-50 to-indigo-50;
+  }
+
+  .bg-section-warm {
+    @apply bg-gradient-to-br from-amber-50 to-orange-50;
+  }
+
+  /* EINHEITLICHE Sektion-Trenner - ENTFERNT */
+  /* Alle Trennerlinien wurden entfernt für sauberes Design */
 
   /* Medical Icon Styles */
   .medical-icon {
@@ -410,9 +565,17 @@
     animation: slideInRight 0.5s ease-out;
   }
 
-  /* Responsive Text */
+  /* Responsive Text - Vollständig erweitert */
   .text-responsive {
     font-size: clamp(1rem, 2.5vw, 1.125rem);
+  }
+
+  .text-responsive-sm {
+    font-size: clamp(0.75rem, 2vw, 1rem);
+  }
+
+  .text-responsive-xs {
+    font-size: clamp(0.625rem, 1.5vw, 0.875rem);
   }
 
   .text-responsive-lg {
@@ -425,6 +588,32 @@
 
   .text-responsive-2xl {
     font-size: clamp(2rem, 5vw, 3rem);
+  }
+
+  /* Responsive Paragraph */
+  p {
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    line-height: 1.6;
+  }
+
+  /* Responsive Small Text */
+  .text-sm-responsive {
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+  }
+
+  /* Responsive Extra Small Text */
+  .text-xs-responsive {
+    font-size: clamp(0.625rem, 1.2vw, 0.75rem);
+  }
+
+  /* Responsive Button Text */
+  .btn-text-responsive {
+    font-size: clamp(0.75rem, 1.8vw, 1rem);
+  }
+
+  /* Responsive Link Text */
+  .link-text-responsive {
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
   }
 }
 
@@ -520,6 +709,28 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Cookie Manager - Floating Button Position (Links Unten) */
+[data-cookie-button] {
+  position: fixed !important;
+  bottom: 1.5rem !important;
+  left: 1.5rem !important;
+  right: auto !important;
+  z-index: 9999 !important;
+}
+
+/* Cookie Manager - Banner Styling (Original beibehalten) */
+[data-cookie-banner] {
+  z-index: 9999 !important;
+}
+
+/* Cookie Manager - "Powered by CookieKit" ausblenden */
+[data-cookie-powered-by],
+.powered-by-cookiekit,
+[class*="powered-by"],
+[class*="poweredBy"] {
+  display: none !important;
 }
 
 /* Print Styles */

@@ -1,58 +1,85 @@
-import React from 'react';
-import Image from 'next/image';
-import { clsx } from 'clsx';
+'use client';
 
-export interface OptimizedImageProps {
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+
+interface OptimizedImageProps {
   src: string;
   alt: string;
+  className?: string;
   width?: number;
   height?: number;
-  className?: string;
   priority?: boolean;
-  quality?: number;
   placeholder?: 'blur' | 'empty';
   blurDataURL?: string;
-  sizes?: string;
-  fill?: boolean;
-  style?: React.CSSProperties;
 }
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
   alt,
+  className = '',
   width,
   height,
-  className = '',
   priority = false,
-  quality = 75,
   placeholder = 'empty',
-  blurDataURL,
-  sizes,
-  fill = false,
-  style,
-  ...props
+  blurDataURL
 }) => {
-  // Generate blur data URL if not provided
-  const defaultBlurDataURL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=';
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const handleLoad = () => {
+    setIsLoaded(true);
+  };
+
+  const handleError = () => {
+    setHasError(true);
+  };
+
+  if (hasError) {
+    return (
+      <div 
+        className={`bg-gray-200 flex items-center justify-center ${className}`}
+        style={{ width, height }}
+      >
+        <span className="text-gray-500 text-sm">Bild konnte nicht geladen werden</span>
+      </div>
+    );
+  }
 
   return (
-    <div className={clsx('relative overflow-hidden', className)} style={style}>
-      <Image
+    <div className={`relative overflow-hidden ${className}`}>
+      {/* Blur Placeholder */}
+      {placeholder === 'blur' && !isLoaded && (
+        <div 
+          className="absolute inset-0 bg-gray-200 animate-pulse"
+          style={{ width, height }}
+        />
+      )}
+      
+      {/* Loading Skeleton */}
+      {!isLoaded && placeholder === 'empty' && (
+        <div 
+          className="absolute inset-0 bg-gray-100 animate-pulse"
+          style={{ width, height }}
+        />
+      )}
+
+      {/* Actual Image */}
+      <motion.img
         src={src}
         alt={alt}
-        width={fill ? undefined : width}
-        height={fill ? undefined : height}
-        fill={fill}
-        priority={priority}
-        quality={quality}
-        placeholder={placeholder}
-        blurDataURL={blurDataURL || defaultBlurDataURL}
-        sizes={sizes}
-        className={clsx(
-          'object-cover transition-transform duration-300 hover:scale-105',
-          fill ? 'w-full h-full' : ''
-        )}
-        {...props}
+        width={width}
+        height={height}
+        onLoad={handleLoad}
+        onError={handleError}
+        loading={priority ? 'eager' : 'lazy'}
+        className={`transition-opacity duration-300 ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        } ${className}`}
+        style={{ width, height }}
+        initial={{ scale: 1.1 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       />
     </div>
   );

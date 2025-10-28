@@ -1,36 +1,27 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Static Export für einfaches Hosting ohne Server
   output: 'export',
   trailingSlash: true,
-  
-  // Bildoptimierung für Static Export
   images: {
     unoptimized: true,
+    domains: ['localhost'],
   },
-  
-  // Performance-Optimierung
-  compress: true,
-  poweredByHeader: false,
-  
-  // Experimentelle Features für bessere Performance
+  // Exclude cookie-manager-temp from build
+  webpack: (config) => {
+    config.watchOptions = {
+      ...config.watchOptions,
+      ignored: ['**/cookie-manager-temp/**'],
+    };
+    return config;
+  },
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
-  
-  // Bundle Analyzer Integration
-  ...(process.env.ANALYZE === 'true' && {
-    webpack: (config) => {
-      const { BundleAnalyzerPlugin } = require('@next/bundle-analyzer')({
-        enabled: true,
-      })
-      config.plugins.push(new BundleAnalyzerPlugin())
-      return config
-    },
-  }),
-  
-  // Headers für bessere Performance und Sicherheit
+  // Performance optimizations
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  // Security headers
   async headers() {
     return [
       {
@@ -48,34 +39,20 @@ const nextConfig = {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
           },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
-          },
         ],
       },
-      {
-        source: '/static/(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-    ]
+    ];
   },
-  
-  // Redirects für SEO
+  // Redirects for SEO
   async redirects() {
     return [
       {
-        source: '/home',
-        destination: '/',
+        source: '/admin',
+        destination: '/admin/',
         permanent: true,
       },
-    ]
+    ];
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

@@ -1,0 +1,21 @@
+{
+  "generated": "2025-10-28T13:11:46.460Z",
+  "totalImages": 13,
+  "formats": [
+    "webp",
+    "avif",
+    "jpg"
+  ],
+  "sizes": [
+    "320w",
+    "640w",
+    "960w",
+    "1280w",
+    "1920w"
+  ],
+  "quality": {
+    "webp": 80,
+    "avif": 75,
+    "jpg": 85
+  }
+}

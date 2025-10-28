@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
 import { Quicksand } from 'next/font/google';
 import './globals.css';
-import Header from '@/components/layout/Header';
+import ResponsiveHeader from '@/components/layout/ResponsiveHeader';
 import Footer from '@/components/layout/Footer';
-import InfoBar from '@/components/ui/InfoBar';
-// import { ConsentProvider } from '@/components/providers/ConsentManager';
+import { Providers } from '@/components/Providers';
 
 // Font configuration - Organic & Human-Centric
 const quicksand = Quicksand({
@@ -98,7 +97,7 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#1e40af" />
         
         {/* Viewport */}
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
         
         {/* Additional Meta Tags */}
         <meta name="format-detection" content="telephone=no" />
@@ -152,21 +151,22 @@ export default function RootLayout({
         />
       </head>
       <body className={`${quicksand.className} antialiased`}>
-        <div className="min-h-screen flex flex-col">
-          <Header />
-          <InfoBar />
-          
-          {/* Skip Links für Accessibility */}
-          <a href="#main-content" className="skip-link">
-            Zum Hauptinhalt springen
-          </a>
-          
-          <main id="main-content" className="flex-1">
-            {children}
-          </main>
-          
-          <Footer />
-        </div>
+        <Providers>
+          <div className="min-h-screen flex flex-col">
+            <ResponsiveHeader />
+            
+            {/* Skip Links für Accessibility */}
+            <a href="#main-content" className="skip-link">
+              Zum Hauptinhalt springen
+            </a>
+            
+            <main id="main-content" className="flex-1">
+              {children}
+            </main>
+            
+            <Footer />
+          </div>
+        </Providers>
       </body>
     </html>
   );
