@@ -33,19 +33,42 @@ const NewsSection: React.FC = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('/api/cms/news');
-      if (response.ok) {
-        const allPosts = await response.json();
-        // Filter only published posts for display
-        const publishedPosts = allPosts.filter((post: NewsPost) => post.published);
-        setPosts(publishedPosts);
-      } else {
-        console.error('Error fetching posts from API');
-        // Fallback to empty array
-        setPosts([]);
-      }
+      // Static news posts for Vercel deployment
+      const staticPosts: NewsPost[] = [
+        {
+          id: "1",
+          title: "Praxis-Urlaub",
+          description: "Vom 15. bis 30. Dezember bleibt unsere Praxis geschlossen. In dringenden Fällen wenden Sie sich an den ärztlichen Bereitschaftsdienst.",
+          date: "2024-12-01",
+          icon: "calendar",
+          color: "yellow",
+          published: true
+        },
+        {
+          id: "2",
+          title: "Grippe-Impfung",
+          description: "Die Grippe-Impfung ist jetzt verfügbar. Vereinbaren Sie Ihren Termin für eine rechtzeitige Impfung vor der Grippesaison.",
+          date: "2024-11-15",
+          icon: "heart",
+          color: "red",
+          published: true
+        },
+        {
+          id: "3",
+          title: "Neue Praxissoftware",
+          description: "Wir haben unsere Praxissoftware modernisiert. Online-Terminbuchung und E-Rezepte sind jetzt verfügbar.",
+          date: "2024-11-01",
+          icon: "shield",
+          color: "yellow",
+          published: true
+        }
+      ];
+      
+      // Filter only published posts for display
+      const publishedPosts = staticPosts.filter((post: NewsPost) => post.published);
+      setPosts(publishedPosts);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.error('Error loading posts:', error);
       setPosts([]);
     } finally {
       setLoading(false);

@@ -38,31 +38,22 @@ const ResponsiveHeader = () => {
     return () => clearInterval(interval);
   }, [logos.length]);
 
-  // Load alert settings from API and handle auto-expansion
+  // Load alert settings from static data and handle auto-expansion
   useEffect(() => {
-    const loadFromAPI = async () => {
-      try {
-        const response = await fetch('/api/cms/alert');
-        if (response.ok) {
-          const apiSettings = await response.json();
-          setAlertSettings({
-            isVisible: true,
-            text: apiSettings.text,
-            lastUpdated: apiSettings.lastUpdated
-          });
-
-          // Auto-expand logic based on best practices
-          const shouldAutoExpand = checkIfShouldAutoExpand(apiSettings.lastUpdated);
-          if (shouldAutoExpand) {
-            setIsAlertExpanded(true);
-          }
-        }
-      } catch (error) {
-        console.error('Error loading alert settings:', error);
-      }
+    // Static alert settings for Vercel deployment
+    const staticSettings = {
+      isVisible: true,
+      text: 'Aktuell: Dr. Schuster-Meinel ist nun Fachärztin in Zschorlau | Neue Kindersprechstunde | Neuaufnahmen möglich',
+      lastUpdated: '2025-10-28T17:24:40.857Z'
     };
 
-    loadFromAPI();
+    setAlertSettings(staticSettings);
+
+    // Auto-expand logic based on best practices
+    const shouldAutoExpand = checkIfShouldAutoExpand(staticSettings.lastUpdated);
+    if (shouldAutoExpand) {
+      setIsAlertExpanded(true);
+    }
   }, []);
 
   // Professional auto-expansion logic following best practices
