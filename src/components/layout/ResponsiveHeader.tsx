@@ -38,11 +38,25 @@ const ResponsiveHeader = () => {
     return () => clearInterval(interval);
   }, [logos.length]);
 
-  // Load alert settings from static JSON file
+  // Load alert settings from localStorage or static JSON file
   useEffect(() => {
     const loadAlertSettings = async () => {
       try {
-        // Import the JSON file directly
+        // First try to load from localStorage (admin panel changes)
+        const localSettings = localStorage.getItem('alertSettings');
+        if (localSettings) {
+          const settings = JSON.parse(localSettings);
+          setAlertSettings(settings);
+          
+          // Auto-expand logic based on best practices
+          const shouldAutoExpand = checkIfShouldAutoExpand(settings.lastUpdated);
+          if (shouldAutoExpand) {
+            setIsAlertExpanded(true);
+          }
+          return;
+        }
+
+        // Fallback to static JSON file
         const alertData = await import('@/data/alert-settings.json');
         const settings = alertData.default || alertData;
         
@@ -71,6 +85,24 @@ const ResponsiveHeader = () => {
     };
 
     loadAlertSettings();
+
+    // Listen for admin panel updates
+    const handleAlertUpdate = (event: CustomEvent) => {
+      const newSettings = event.detail;
+      setAlertSettings(newSettings);
+      
+      // Check if should auto-expand after update
+      const shouldAutoExpand = checkIfShouldAutoExpand(newSettings.lastUpdated);
+      if (shouldAutoExpand) {
+        setIsAlertExpanded(true);
+      }
+    };
+
+    window.addEventListener('alertSettingsUpdated', handleAlertUpdate as EventListener);
+    
+    return () => {
+      window.removeEventListener('alertSettingsUpdated', handleAlertUpdate as EventListener);
+    };
   }, []);
 
   // Professional auto-expansion logic following best practices

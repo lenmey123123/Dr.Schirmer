@@ -27,17 +27,36 @@ const NewsSection: React.FC = () => {
       fetchPosts();
     };
 
+    const handleNewsPostsUpdate = (event: CustomEvent) => {
+      const posts = event.detail;
+      const publishedPosts = posts.filter((post: NewsPost) => post.published);
+      setPosts(publishedPosts);
+    };
+
     window.addEventListener('newsUpdated', handleNewsUpdate);
-    return () => window.removeEventListener('newsUpdated', handleNewsUpdate);
+    window.addEventListener('newsPostsUpdated', handleNewsPostsUpdate as EventListener);
+    
+    return () => {
+      window.removeEventListener('newsUpdated', handleNewsUpdate);
+      window.removeEventListener('newsPostsUpdated', handleNewsPostsUpdate as EventListener);
+    };
   }, []);
 
   const fetchPosts = async () => {
     try {
-      // Import the JSON file directly
+      // First try to load from localStorage (admin panel changes)
+      const localPosts = localStorage.getItem('newsPosts');
+      if (localPosts) {
+        const posts = JSON.parse(localPosts);
+        const publishedPosts = posts.filter((post: NewsPost) => post.published);
+        setPosts(publishedPosts);
+        return;
+      }
+
+      // Fallback to static JSON file
       const newsData = await import('@/data/news-posts.json');
       const data = newsData.default || newsData;
       
-      // Handle both array format and object with posts property
       let posts: NewsPost[] = [];
       if (Array.isArray(data)) {
         posts = data as NewsPost[];
