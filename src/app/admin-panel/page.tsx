@@ -106,7 +106,11 @@ const AdminPanel: React.FC = () => {
 
   const updateNewsPost = (index: number, field: keyof NewsPost, value: any) => {
     const updated = [...newsPosts];
-    updated[index] = { ...updated[index], [field]: value };
+    const currentPost = updated[index];
+    updated[index] = { 
+      ...currentPost, 
+      [field]: value 
+    } as NewsPost;
     setNewsPosts(updated);
   };
 
