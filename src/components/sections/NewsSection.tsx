@@ -38,7 +38,12 @@ const NewsSection: React.FC = () => {
       const data = newsData.default || newsData;
       
       // Handle both array format and object with posts property
-      const posts = Array.isArray(data) ? data : data.posts || [];
+      let posts: NewsPost[] = [];
+      if (Array.isArray(data)) {
+        posts = data as NewsPost[];
+      } else if (data && typeof data === 'object' && 'posts' in data) {
+        posts = (data as { posts: NewsPost[] }).posts;
+      }
       
       // Filter only published posts for display
       const publishedPosts = posts.filter((post: NewsPost) => post.published);
